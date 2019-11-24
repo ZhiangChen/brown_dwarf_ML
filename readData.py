@@ -61,7 +61,7 @@ class dataReader(object):
                 wv = np.flip(wv)
                 flux = np.flip(flux)
             label = f.split("spectrum.txt")[0].split("_")
-            teff, logg = label[1], label[3]
+            teff, logg = float(label[1]), float(label[3])
             data = dict()
             data['wavelength'] = wv
             data['flux'] = flux
@@ -136,31 +136,31 @@ if __name__ == "__main__":
     txt_path = "./cold_BD_grid/"
     dr = dataReader(pickle_path, txt_path)
     # read from original data and generate pickle files
-    """
+
     dr.read_PickleData()
+    dr.truncateData()
     dr.save_Pickle("20_BD_data.pickle", dr.data)
     dr.read_TXTData()
     dr.save_Pickle("synthetic_data.pickle", dr.synthetic_data)
-    """
 
     # save truncated data
-    """
+
     dr.synthetic_data = dr.read_Pickle("synthetic_data.pickle")
     dr.truncateSyntheticData()
     dr.save_Pickle("truncated_synthetic_data.pickle", dr.synthetic_data)
-    """
 
+    """
     # read from pickles
     dr.data = dr.read_Pickle("20_BD_data.pickle")
     dr.synthetic_data = dr.read_Pickle("truncated_synthetic_data.pickle")
-
+    # visualize data
     print(len(dr.synthetic_data[0]['wavelength']))
     print(dr.synthetic_data[0]['wavelength'])
     plt.plot(dr.synthetic_data[0]['wavelength'], dr.synthetic_data[0]['flux'])
     data = dr.interpolateData(dr.synthetic_data)
     plt.plot(data[0]['wavelength'], data[0]['flux'], label='linear interp')
     plt.show()
-
+    """
 
     # plot original, resampled, and interpolation data
     """
