@@ -8,9 +8,8 @@ Nov 24, 2019
 from __future__ import absolute_import, division, print_function, unicode_literals
 import tensorflow as tf
 import pandas as pd
-from data import *
 
-class FCN(object):
+class FCL(object):
     def __init__(self, input_shape, layers, activation_function='relu'):
         """
         :param input_shape: (int)
@@ -23,9 +22,6 @@ class FCN(object):
 
         self.model = self._build_model()
         self.model.summary()
-
-
-
 
     def _build_model(self):
         layers = list()
@@ -40,16 +36,26 @@ class FCN(object):
         model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
         return model
 
-    def train(self, data, labels, validation_slipt, epochs):
+    def train(self, dataset, epochs, verbose=0, validation_data=None):
+        """
+
+        :param dataset:
+        :param epochs: In each epoch, all training dataset will be trained once.
+        :param verbose: 0 = silent, 1 = progress bar, 2 = one line per epoch
+        :return:
+        """
         # callbacks
-        class PrintDot(keras.callbacks.Callback):
+        class PrintDot(tf.keras.callbacks.Callback):
             def on_epoch_end(self, epoch, logs):
                 if epoch % 100 == 0: print('')
                 print('.', end='')
 
         #early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
-        history = self.model.fit(data, labels, epochs=epochs, validation_slipt=validation_slipt, verbose=0, callbacks=[PrintDot()])
+        history = self.model.fit(dataset, epochs=epochs, verbose=verbose, callbacks=[PrintDot()], validation_data=validation_data)
         return history
+
+    def evaluate(self, dataset):
+        pass
 
     def plot_history(self, history):
         hist = pd.DataFrame(history.history)
@@ -71,3 +77,8 @@ class FCN(object):
         plt.ylim([0, 20])
         plt.legend()
         plt.show()
+
+if __name__ == "__main__":
+    inputs = 200
+    layers = [200, 20, 2]
+    nn = FCL(inputs, layers)

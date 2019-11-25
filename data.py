@@ -82,6 +82,15 @@ class browndwarf(dataReader):
             # scale real data
             return self._getTF_Data(self.test_data)
 
+    def splitData(self, flux, labels, split=0.8):
+        nm = flux.shape[0]
+        p = int(nm*split)
+        flux_1 = flux[: p, :]
+        labels_1 = labels[: p, :]
+        flux_2 = flux[p:, :]
+        labels_2 = labels[p:, :]
+        return flux_1, labels_1, flux_2, labels_2
+
     def _getTF_Data(self, data):
         flux = np.asarray([obj['flux'] for obj in data])
         teff = np.asarray([obj['teff'] for obj in data])
