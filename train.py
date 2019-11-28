@@ -28,10 +28,10 @@ test_dataset = test_dataset.batch(BATCH_SIZE)
 input_shape = train_flux[0].shape[0]
 layers = [100, 10, 2]
 nn = FCL(input_shape, layers)
-#history = nn.train(train_dataset, epochs=2, verbose=100, validation_data=valid_dataset, save_model=True)
-#nn.plot_history(history)
+history = nn.train(train_dataset, epochs=200, verbose=2, validation_data=valid_dataset, save_model=True)
+nn.plot_history(history)
 
-nn.load_weights('training/cp-0100.ckpt')
-print(nn.evaluate(test_dataset))
-print(nn.predict(test_flux))
-print(test_labels)
+#nn.load_weights('training/cp-0100.ckpt')
+#print(nn.evaluate(test_dataset))
+#print(nn.predict(test_flux))
+#print(test_labels)

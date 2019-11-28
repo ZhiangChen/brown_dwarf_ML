@@ -8,6 +8,7 @@ Nov 24, 2019
 from __future__ import absolute_import, division, print_function, unicode_literals
 import tensorflow as tf
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 
 class FCL(object):
@@ -94,7 +95,7 @@ class FCL(object):
         plt.ylabel('Mean Abs Error [MPG]')
         plt.plot(hist['epoch'], hist['mae'], label='Train Error')
         plt.plot(hist['epoch'], hist['val_mae'], label='Val Error')
-        plt.ylim([0, 5])
+        plt.ylim([0, 0.15])
         plt.legend()
 
         plt.figure()
@@ -102,7 +103,7 @@ class FCL(object):
         plt.ylabel('Mean Square Error [$MPG^2$]')
         plt.plot(hist['epoch'], hist['mse'], label='Train Error')
         plt.plot(hist['epoch'], hist['val_mse'], label='Val Error')
-        plt.ylim([0, 20])
+        plt.ylim([0, 0.02])
         plt.legend()
         plt.show()
 
