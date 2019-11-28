@@ -74,7 +74,7 @@ class browndwarf(dataReader):
         """
         if synthetic:
             assert len(self.test_synthetic) > 0
-            data = self._scaleSyntheticData(self.train_synthetic)
+            data = self._scaleSyntheticData(self.test_synthetic)
             return self._getTF_Data(data)
         else:
             assert len(self.test_data) > 0

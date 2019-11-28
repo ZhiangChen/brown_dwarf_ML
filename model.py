@@ -8,6 +8,7 @@ Nov 24, 2019
 from __future__ import absolute_import, division, print_function, unicode_literals
 import tensorflow as tf
 import pandas as pd
+import os
 
 class FCL(object):
     def __init__(self, input_shape, layers, activation_function='relu'):
@@ -36,7 +37,7 @@ class FCL(object):
         model.compile(loss='mse', optimizer=optimizer, metrics=['mae', 'mse'])
         return model
 
-    def train(self, dataset, epochs, verbose=0, validation_data=None):
+    def train(self, dataset, epochs, verbose=0, save_model=False, validation_data=None):
         """
 
         :param dataset:
@@ -45,17 +46,44 @@ class FCL(object):
         :return:
         """
         # callbacks
+        """
         class PrintDot(tf.keras.callbacks.Callback):
             def on_epoch_end(self, epoch, logs):
                 if epoch % 100 == 0: print('')
                 print('.', end='')
-
+        """
+        #callbacks.append(PrintDot)
         #early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=10)
-        history = self.model.fit(dataset, epochs=epochs, verbose=verbose, callbacks=[PrintDot()], validation_data=validation_data)
+        callbacks = None
+        if save_model:
+            checkpoint_path = "training/cp-{epoch:04d}.ckpt"
+            checkpoint_dir = os.path.dirname(checkpoint_path)
+
+            # Create a callback that saves the model's weights
+            cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
+                                                             save_weights_only=True,
+                                                             verbose=2)
+            callbacks = [cp_callback]
+
+        history = self.model.fit(dataset, epochs=epochs, verbose=verbose, callbacks=callbacks, validation_data=validation_data)
         return history
 
+    def load_weights(self, ckpt_path):
+        self.model.load_weights(ckpt_path)
+
     def evaluate(self, dataset):
-        pass
+        """
+        :param dataset: TF data
+        :return:
+        """
+        return self.model.evaluate(dataset)
+
+    def predict(self, dataset):
+        """
+        :param dataset: TF data; ndarray
+        :return:
+        """
+        return self.model.predict(dataset)
 
     def plot_history(self, history):
         hist = pd.DataFrame(history.history)

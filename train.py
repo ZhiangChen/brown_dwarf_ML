@@ -18,14 +18,20 @@ test_flux, test_labels = BD.getTest(synthetic=True)
 train_dataset = tf.data.Dataset.from_tensor_slices((train_flux, train_labels))
 valid_dataset = tf.data.Dataset.from_tensor_slices((valid_flux, valid_labels))
 test_dataset = tf.data.Dataset.from_tensor_slices((test_flux, test_labels))
-
 BATCH_SIZE = 1
-
 train_dataset = train_dataset.batch(BATCH_SIZE)
 valid_dataset = valid_dataset.batch(BATCH_SIZE)
 test_dataset = test_dataset.batch(BATCH_SIZE)
 
+
+
 input_shape = train_flux[0].shape[0]
 layers = [100, 10, 2]
 nn = FCL(input_shape, layers)
-nn.train(train_dataset, epochs=100, verbose=2, validation_data=valid_dataset)
+#history = nn.train(train_dataset, epochs=2, verbose=100, validation_data=valid_dataset, save_model=True)
+#nn.plot_history(history)
+
+nn.load_weights('training/cp-0100.ckpt')
+print(nn.evaluate(test_dataset))
+print(nn.predict(test_flux))
+print(test_labels)
