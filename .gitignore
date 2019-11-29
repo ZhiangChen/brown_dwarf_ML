@@ -3,6 +3,7 @@
 cold_BD_grid/*
 *.pickle
 training/*
+**training
 
 
 

@@ -107,6 +107,15 @@ class FCL(object):
         plt.legend()
         plt.show()
 
+
+class Conv1DResNet(object):
+    def __init__(self, input_shape):
+        self.input_shape = input_shape
+
+
+    def _build_model(self):
+        pass
+
 if __name__ == "__main__":
     inputs = 200
     layers = [200, 20, 2]

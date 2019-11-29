@@ -23,13 +23,20 @@ train_dataset = train_dataset.batch(BATCH_SIZE)
 valid_dataset = valid_dataset.batch(BATCH_SIZE)
 test_dataset = test_dataset.batch(BATCH_SIZE)
 
-
-
 input_shape = train_flux[0].shape[0]
 layers = [100, 10, 2]
+
 nn = FCL(input_shape, layers)
-history = nn.train(train_dataset, epochs=200, verbose=2, validation_data=valid_dataset, save_model=True)
+history = nn.train(train_dataset, epochs=400, verbose=2, validation_data=valid_dataset, save_model=True)
 nn.plot_history(history)
+
+"""
+# leaky_relu
+lrelu = lambda x: tf.nn.leaky_relu(x, alpha=0.1)
+nn = FCL(input_shape, layers, activation_function=lrelu)
+history = nn.train(train_dataset, epochs=800, verbose=2, validation_data=valid_dataset, save_model=True)
+nn.plot_history(history)
+"""
 
 #nn.load_weights('training/cp-0100.ckpt')
 #print(nn.evaluate(test_dataset))

@@ -32,7 +32,7 @@ class browndwarf(dataReader):
         data_nm = len(self.data)
         synthetic_data_nm = len(self.synthetic_data)
         self.train_data = copy.deepcopy(self.data[: int(data_nm*data_ratio)])
-        self.test_data = copy.deepcopy(self.data[int(data_nm*data_ratio) :])
+        self.test_data = copy.deepcopy(self.data[int(data_nm*data_ratio):])
         self.train_synthetic = copy.deepcopy(self.synthetic_data[: int(synthetic_data_nm*synthetic_data_ratio)])
         self.test_synthetic = copy.deepcopy(self.synthetic_data[int(synthetic_data_nm*synthetic_data_ratio):])
 
