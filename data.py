@@ -51,7 +51,9 @@ class browndwarf(dataReader):
             assert len(self.train_data) > 0
             """!!!!!!!"""
             # scale real data
-            return self._getTF_Data(self.train_data)
+            data = self.interpolateData(self.train_data)
+            data = self._scaleData(data)
+            return self._getTF_Data(data)
 
     def resampleTrain(self):
         """
@@ -80,7 +82,9 @@ class browndwarf(dataReader):
             assert len(self.test_data) > 0
             """!!!!!!!"""
             # scale real data
-            return self._getTF_Data(self.test_data)
+            data = self.interpolateData(self.test_data)
+            data = self._scaleData(data)
+            return self._getTF_Data(data)
 
     def splitData(self, flux, labels, split=0.8):
         nm = flux.shape[0]
@@ -109,7 +113,12 @@ class browndwarf(dataReader):
     def _scaleData(self, data_list):
         new_data_list = copy.deepcopy(data_list)
         for data in new_data_list:
-            pass
+            data['flux'] = np.maximum(0, data['flux'])
+            data['flux'] = self._logTransform(data['flux']*1e-11, 200)
+            data['teff'] = 1.0/650 * data['teff'] - 300.0/650
+            data['logg'] = 1.0/2.5 * data['logg'] - 3.0/2.5
+        return new_data_list
+
 
     def _logTransform(self, data, base):
         # logarithm base change rule
@@ -119,7 +128,7 @@ if __name__ == "__main__":
     BD = browndwarf()
     BD.loadPickles('20_BD_data.pickle', 'truncated_synthetic_data.pickle')
     # I don't want to include any real observations in the training
-    BD.prepareDatasets(data_ratio=1.0, synthetic_data_ratio=0.8)
+    BD.prepareDatasets(data_ratio=.1, synthetic_data_ratio=0.8)
     # Inspect input scaling
     # real observation
 
@@ -146,7 +155,7 @@ if __name__ == "__main__":
     plt.hist(np.sort(teffs), bins=10)
     plt.show()
     """
-    flux, labels = BD.getTrain(synthetic=True)
+    flux, labels = BD.getTest(synthetic=False)
     print(np.max(labels, axis=0))
     print(np.min(labels, axis=0))
 

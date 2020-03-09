@@ -86,7 +86,7 @@ class FCL(object):
         """
         return self.model.predict(dataset)
 
-    def plot_history(self, history):
+    def plot_history(self, history, y_mae=0.15, y_mse=0.02):
         hist = pd.DataFrame(history.history)
         hist['epoch'] = history.epoch
 
@@ -95,7 +95,7 @@ class FCL(object):
         plt.ylabel('Mean Abs Error [MPG]')
         plt.plot(hist['epoch'], hist['mae'], label='Train Error')
         plt.plot(hist['epoch'], hist['val_mae'], label='Val Error')
-        plt.ylim([0, 0.15])
+        plt.ylim([0, y_mae])
         plt.legend()
 
         plt.figure()
@@ -103,7 +103,7 @@ class FCL(object):
         plt.ylabel('Mean Square Error [$MPG^2$]')
         plt.plot(hist['epoch'], hist['mse'], label='Train Error')
         plt.plot(hist['epoch'], hist['val_mse'], label='Val Error')
-        plt.ylim([0, 0.02])
+        plt.ylim([0, y_mse])
         plt.legend()
         plt.show()
 
@@ -120,3 +120,23 @@ if __name__ == "__main__":
     inputs = 200
     layers = [200, 20, 2]
     nn = FCL(inputs, layers)
+
+
+def plot_history(history):
+    hist = pd.DataFrame(history.history)
+    hist['epoch'] = history.epoch
+    plt.figure()
+    plt.xlabel('Epoch')
+    plt.ylabel('Mean Abs Error [MPG]')
+    plt.plot(hist['epoch'], hist['mae'], label='Train Error')
+    plt.plot(hist['epoch'], hist['val_mae'], label='Val Error')
+    plt.ylim([0, 0.5])
+    plt.legend()
+    plt.figure()
+    plt.xlabel('Epoch')
+    plt.ylabel('Mean Square Error [$MPG^2$]')
+    plt.plot(hist['epoch'], hist['mse'], label='Train Error')
+    plt.plot(hist['epoch'], hist['val_mse'], label='Val Error')
+    plt.ylim([0, 0.5])
+    plt.legend()
+    plt.show()

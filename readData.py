@@ -131,6 +131,13 @@ class dataReader(object):
             data['flux'] = new_flux
         return new_data_list
 
+    def convertUnit(self):
+        for d in self.data:
+            wl_data, flx_data, flxerr_data = d['wavelength'], d['flux'], d['err']
+            c = 3.E8
+            d['flux'] = ((wl_data ** 2) * (flx_data)) / (c * 10. ** -26)  # in janskys (Jy), the err too
+            d['err'] = ((wl_data ** 2) * (flxerr_data)) / (c * 10. ** -26)
+
 if __name__ == "__main__":
     pickle_path = "./20browndwarf/"
     txt_path = "./cold_BD_grid/"
